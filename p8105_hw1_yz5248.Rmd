@@ -31,3 +31,56 @@ Key variables include:
 - `visib`: visibility in miles  
 
 The mean temperature during this period was **`r round(mean(early_january_weather$temp), 1)` °F**.
+
+## Problem 1: Scatterplot of Temperature vs Time
+
+```{r scatterplot, fig.width=7, fig.height=5}
+library(ggplot2)
+
+# Create scatterplot
+scatter_temp_time <- ggplot(early_january_weather, aes(x = time_hour, y = temp, color = humid)) +
+  geom_point() +
+  labs(
+    title = "Temperature vs Time (Colored by Humidity)",
+    x = "Time (Hour)",
+    y = "Temperature (°F)",
+    color = "Humidity"
+  ) +
+  theme_minimal()
+
+# Print plot so it shows up in the knitted document
+scatter_temp_time
+
+# Save plot as PNG file in your project directory
+ggsave("scatter_temp_time.png", scatter_temp_time, width = 7, height = 5)
+```
+
+The scatterplot shows hourly temperature over time, with point colors indicating humidity levels. Several patterns are apparent:  
+1. Daily cycles: Temperatures follow a roughly repeating daily pattern — lower in the early morning hours and higher during the day.  
+2. Gradual warming: Overall temperatures tend to increase over the two-week period, with the warmest temperatures occurring around January 13–14.  
+3. Humidity relationship: Points with darker colors (lower humidity) generally correspond to higher temperatures, while lighter blue points (higher humidity) appear at cooler temperatures.  
+4. Variation: There is some day-to-day variability, but the general trend shows a gradual rise followed by a slight drop near the end.  
+
+
+## Problem 2: Variable Types and Coercion
+
+```{r create-df}
+library(tidyverse)
+set.seed(123) # for reproducibility
+
+df <- tibble::tibble(
+  norm_sample = rnorm(10),                      # numeric: random N(0,1)
+  positive = rnorm(10) > 0,                     # logical: TRUE/FALSE
+  char_vec    = sample(letters[1:3], 10, TRUE), # character vector
+  factor_vec  = factor(sample(c("low","med","high"), 10, TRUE))
+)
+
+df
+mean(df |> pull(norm_sample))  # works: numeric data
+mean(df |> pull(positive))  # works: TRUE=1, FALSE=0 -> proportion > 0
+```
+```{r create numeric}
+as.numeric(df$positive)
+as.numeric(df$char_vec)
+as.numeric(df$factor_vec)
+```
