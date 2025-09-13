@@ -1,0 +1,33 @@
+---
+title: "p8105_hw1_yz5248"
+author: "yz5248"
+date: "2025-09-13"
+output: github_document
+---
+
+
+```{r echo=TRUE}
+library("moderndive")
+data("early_january_weather")
+```
+```{r echo=TRUE}
+nrow(early_january_weather)
+ncol(early_january_weather)
+round(mean(early_january_weather$temp), 1)
+```
+
+## Problem 1: Dataset Description
+
+The `early_january_weather` dataset comes from the **moderndive** package and contains hourly weather data collected at LaGuardia Airport (LGA) in early January 2013.
+
+This dataset has **`r nrow(early_january_weather)`** rows and **`r ncol(early_january_weather)`** columns.  
+Key variables include:
+
+- `time_hour`: date-time object indicating the hour of observation  
+- `temp`: temperature in Fahrenheit  
+- `humid`: relative humidity  
+- `wind_speed`: wind speed in mph  
+- `precip`: precipitation in inches  
+- `visib`: visibility in miles  
+
+The mean temperature during this period was **`r round(mean(early_january_weather$temp), 1)` °F**.
