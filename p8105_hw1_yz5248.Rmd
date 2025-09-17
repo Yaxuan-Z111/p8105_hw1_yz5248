@@ -1,42 +1,47 @@
 ---
 title: "p8105_hw1_yz5248"
 author: "yz5248"
-date: "2025-09-13"
+date: "2025-09-17"
 output: github_document
 ---
 
-
+## Problem 1: Dataset Description
 ```{r echo=TRUE}
 library("moderndive")
+library(ggplot2)
+library(tidyverse)
 data("early_january_weather")
 ```
+
 ```{r echo=TRUE}
+??early_january_weather
 nrow(early_january_weather)
 ncol(early_january_weather)
 round(mean(early_january_weather$temp), 1)
 ```
 
-## Problem 1: Dataset Description
-
 The `early_january_weather` dataset comes from the **moderndive** package and contains hourly weather data collected at LaGuardia Airport (LGA) in early January 2013.
 
 This dataset has **`r nrow(early_january_weather)`** rows and **`r ncol(early_january_weather)`** columns.  
-Key variables include:
-
-- `time_hour`: date-time object indicating the hour of observation  
-- `temp`: temperature in Fahrenheit  
-- `humid`: relative humidity  
-- `wind_speed`: wind speed in mph  
-- `precip`: precipitation in inches  
-- `visib`: visibility in miles  
+Key variables include:  
+-'origin': Weather station identifier (all are "EWR", Newark Liberty Airport).  
+-'year, month, day, hour': Date and time information for each observation.  
+-'temp': Temperature in degrees Fahrenheit.  
+-'dewp': Dewpoint in degrees Fahrenheit.  
+-'humid': Relative humidity (percent).  
+-'wind_dir': Wind direction in degrees.  
+-'wind_speed': Wind speed in mph.  
+-'wind_gust': Wind gust in mph (may contain missing values).  
+-'precip': Precipitation (inches).  
+-'pressure': Sea-level pressure (millibars).  
+-'visib': Visibility (miles).  
+-'time_hour': Date/time as a POSIXct variable for easier plotting and analysis.  
 
 The mean temperature during this period was **`r round(mean(early_january_weather$temp), 1)` °F**.
 
 ## Problem 1: Scatterplot of Temperature vs Time
 
 ```{r scatterplot, fig.width=7, fig.height=5}
-library(ggplot2)
-
 # Create scatterplot
 scatter_temp_time <- ggplot(early_january_weather, aes(x = time_hour, y = temp, color = humid)) +
   geom_point() +
@@ -63,24 +68,31 @@ The scatterplot shows hourly temperature over time, with point colors indicating
 
 
 ## Problem 2: Variable Types and Coercion
-
+Create the data frame.  
 ```{r create-df}
-library(tidyverse)
 set.seed(123) # for reproducibility
 
-df <- tibble::tibble(
+my_df <- tibble::tibble(
   norm_sample = rnorm(10),                      # numeric: random N(0,1)
   positive = rnorm(10) > 0,                     # logical: TRUE/FALSE
   char_vec    = sample(letters[1:3], 10, TRUE), # character vector
   factor_vec  = factor(sample(c("low","med","high"), 10, TRUE))
 )
 
-df
-mean(df |> pull(norm_sample))  # works: numeric data
-mean(df |> pull(positive))  # works: TRUE=1, FALSE=0 -> proportion > 0
+my_df
 ```
+
+Take the mean by pull.  
+```{r}
+mean(my_df %>% pull(norm_sample))  # works: numeric data
+mean(my_df %>% pull(positive))  # works: TRUE=1, FALSE=0 -> proportion > 0
+# mean(my_df %>% pull(char_var)) will get an error output. Since char_var is a character vector (contains text like "a", "b"), mean() can only work with numeric or logical data.
+# mean(my_df %>% pull(factor_var)) will get an error output. Since factor_var is a character vector (contains text like "high", "low"), mean() can only work with numeric or logical data.
+```
+
+Coercion using as.numeric.  
 ```{r create numeric}
-as.numeric(df$positive)
-as.numeric(df$char_vec)
-as.numeric(df$factor_vec)
+as.numeric(my_df$positive)
+as.numeric(my_df$char_vec)
+as.numeric(my_df$factor_vec)
 ```
