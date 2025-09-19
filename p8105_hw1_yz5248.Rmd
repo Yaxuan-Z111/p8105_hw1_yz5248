@@ -95,4 +95,10 @@ Coercion using as.numeric.
 as.numeric(my_df$positive)
 as.numeric(my_df$char_vec)
 as.numeric(my_df$factor_vec)
+mean(as.numeric(my_df$positive))
+mean(as.numeric(my_df$char_vec))
+mean(as,numeric(my_df$factor_vec))
 ```
+For Logical variable (positive): When converted to numeric, TRUE becomes 1 and FALSE becomes 0.Therefore, mean(positive) gives the proportion of values greater than 0.  
+Character variable (char_vec): When converted to numeric, R cannot convert letters into For numbers and returns NA with a warning (NAs introduced by coercion).This explains why mean(char_vec) produces an error — characters cannot be averaged.  
+For Factor variable (factor_vec): When converted to numeric, R returns the underlying integer codes for factor levels (e.g., 1, 2, 3).Taking the mean of these codes is possible, but it is not meaningful because these numbers represent level order, not actual quantities.
